@@ -47,4 +47,5 @@ Com base nesses dados:
 
 
 Link do trello do front-end: https://trello.com/invite/b/6aa04226446c9934ab387bfd/ATTI7c3efb561a74fd39bb54fb76e0a8874c350AA17D/front-end-do-tcc
+
 Link do trello completo do Projeto:https://trello.com/invite/b/69a6dea5184fbf62e2bc72a8/ATTI30162ca798ba10df4ca71f97de57d1969A1102E9/projeto-tcc
