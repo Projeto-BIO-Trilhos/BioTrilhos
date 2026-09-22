@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bio Trilhos | Estufa Inteligente</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🌿</div>
+      <div>
+        <strong>Bio Trilhos</strong>
+        <span>Estufa Inteligente</span>
+      </div>
+    </div>
+
+    <nav>
+      <button class="nav-item active" data-section="dashboard">⌂ <span>Dashboard</span></button>
+      <button class="nav-item" data-section="sensores">◉ <span>Sensores</span></button>
+      <button class="nav-item" data-section="irrigacao">💧 <span>Irrigação</span></button>
+      <button class="nav-item" data-section="clima">☁ <span>Clima</span></button>
+      <button class="nav-item" data-section="historico">▤ <span>Histórico</span></button>
+    </nav>
+
+    <div class="system-status">
+      <span class="pulse"></span>
+      <div>
+        <strong>Sistema online</strong>
+        <small>Arduino conectado</small>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">MONITORAMENTO EM TEMPO REAL</p>
+        <h1 id="page-title">Dashboard</h1>
+      </div>
+      <div class="header-actions">
+        <span class="last-update">Atualizado <strong id="lastUpdate">agora</strong></span>
+        <button class="icon-button" id="refreshBtn" title="Atualizar">↻</button>
+        <div class="avatar">BT</div>
+      </div>
+    </header>
+
+    <section id="dashboard" class="page-section active-section">
+      <div class="hero">
+        <div>
+          <span class="tag">● OPERAÇÃO NORMAL</span>
+          <h2>Olá! A estufa está<br><span>em boas condições.</span></h2>
+          <p>O sistema está monitorando os sensores e automatizando a irrigação para manter a vegetação nativa saudável.</p>
+        </div>
+        <div class="hero-visual">🌳<span>🌱</span>🌿</div>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <h2>Visão geral</h2>
+          <p>Principais variáveis ambientais da estufa.</p>
+        </div>
+        <span class="live"><i></i> Ao vivo</span>
+      </div>
+
+      <div class="cards">
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-icon temperature">°C</span><span class="status good">Normal</span></div>
+          <p>Temperatura</p><strong id="temperature">24.8°C</strong>
+          <small>Faixa ideal: 20°C – 28°C</small>
+          <div class="progress"><i id="tempBar" style="width:58%"></i></div>
+        </article>
+
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-icon air">♨</span><span class="status good">Adequada</span></div>
+          <p>Umidade do ar</p><strong id="airHumidity">72%</strong>
+          <small>Faixa ideal: 60% – 80%</small>
+          <div class="progress"><i id="airBar" style="width:72%"></i></div>
+        </article>
+
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-icon soil">♒</span><span class="status good">Adequada</span></div>
+          <p>Umidade do solo</p><strong id="soilHumidity">64%</strong>
+          <small>Faixa ideal: 50% – 75%</small>
+          <div class="progress"><i id="soilBar" style="width:64%"></i></div>
+        </article>
+
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-icon water">💧</span><span class="status good">Disponível</span></div>
+          <p>Reservatório</p><strong id="waterLevel">82%</strong>
+          <small>Capacidade estimada: 1.000 L</small>
+          <div class="progress"><i id="waterBar" style="width:82%"></i></div>
+        </article>
+      </div>
+
+      <div class="grid-two">
+        <article class="panel">
+          <div class="panel-title">
+            <div><h3>Automação da irrigação</h3><p>Controle baseado nos sensores</p></div>
+            <span class="auto-badge">AUTO</span>
+          </div>
+          <div class="irrigation-box">
+            <div class="water-drop">💧</div>
+            <div><strong id="irrigationStatus">Irrigação em espera</strong><p>O solo está dentro da faixa de umidade ideal.</p></div>
+            <label class="switch"><input type="checkbox" id="autoToggle" checked><span></span></label>
+          </div>
+          <div class="mini-stats">
+            <div><span>Última irrigação</span><strong id="lastIrrigation">Hoje, 09:42</strong></div>
+            <div><span>Duração</span><strong>04 min</strong></div>
+            <div><span>Modo</span><strong>Automático</strong></div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <div><h3>Previsão meteorológica</h3><p>Dados da API climática</p></div>
+            <span class="api-badge">API CONECTADA</span>
+          </div>
+          <div class="weather-main">
+            <span class="weather-icon">🌦️</span>
+            <div><strong id="weatherTemp">23°C</strong><span>Possibilidade de chuva</span></div>
+            <b id="rainChance">35%</b>
+          </div>
+          <div class="forecast">
+            <div><span>Hoje</span><b>🌦️</b><strong>23°</strong></div>
+            <div><span>Amanhã</span><b>🌧️</b><strong>21°</strong></div>
+            <div><span>Qui</span><b>☀️</b><strong>25°</strong></div>
+            <div><span>Sex</span><b>🌤️</b><strong>24°</strong></div>
+          </div>
+        </article>
+      </div>
+
+      <article class="panel chart-panel">
+        <div class="panel-title">
+          <div><h3>Umidade do solo</h3><p>Últimas 12 horas</p></div>
+          <span class="legend"><i></i> Umidade (%)</span>
+        </div>
+        <div class="chart" id="chart"></div>
+      </article>
+    </section>
+
+    <section id="sensores" class="page-section">
+      <div class="section-heading"><div><h2>Sensores</h2><p>Acompanhamento dos dispositivos conectados ao Arduino.</p></div></div>
+      <div class="sensor-list">
+        <div class="sensor-row"><span class="sensor-circle">🌡️</span><div><strong>Sensor de temperatura</strong><small>Temperatura interna</small></div><b>24.8 °C</b><span class="status good">Online</span></div>
+        <div class="sensor-row"><span class="sensor-circle">💨</span><div><strong>Sensor de umidade do ar</strong><small>Umidade relativa</small></div><b>72%</b><span class="status good">Online</span></div>
+        <div class="sensor-row"><span class="sensor-circle">🌱</span><div><strong>Sensor de umidade do solo</strong><small>Umidade do substrato</small></div><b id="sensorSoil">64%</b><span class="status good">Online</span></div>
+        <div class="sensor-row"><span class="sensor-circle">💧</span><div><strong>Sensor do reservatório</strong><small>Nível de água</small></div><b>82%</b><span class="status good">Online</span></div>
+      </div>
+    </section>
+
+    <section id="irrigacao" class="page-section">
+      <div class="section-heading"><div><h2>Irrigação</h2><p>Gerenciamento automático e manual do sistema de água.</p></div></div>
+      <div class="grid-two">
+        <article class="panel big-control">
+          <span class="tag">AUTOMAÇÃO</span>
+          <h3>Controle da irrigação</h3>
+          <p>Quando a umidade do solo estiver abaixo do limite definido, o sistema pode acionar automaticamente a bomba.</p>
+          <div class="control-number"><span>Limite mínimo</span><strong>50%</strong></div>
+          <button class="primary" id="manualIrrigation">▶ Acionar irrigação</button>
+          <p class="note" id="manualMessage">O acionamento manual ficará registrado no histórico.</p>
+        </article>
+        <article class="panel">
+          <div class="panel-title"><div><h3>Reservatório</h3><p>Água disponível para irrigação</p></div></div>
+          <div class="tank"><div id="tankFill"></div><span id="tankText">82%</span></div>
+          <div class="mini-stats"><div><span>Capacidade</span><strong>1.000 L</strong></div><div><span>Disponível</span><strong id="availableLiters">820 L</strong></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="clima" class="page-section">
+      <div class="section-heading"><div><h2>Clima</h2><p>Informações recebidas pela API meteorológica.</p></div></div>
+      <div class="weather-card">
+        <div class="weather-big">🌦️ <strong>23°C</strong></div>
+        <div><h3>Possibilidade de chuva</h3><p>Os dados meteorológicos são usados para auxiliar no gerenciamento da água.</p></div>
+        <div class="rain-number">35%<small>chance de chuva</small></div>
+      </div>
+      <div class="forecast large"><div>Hoje <b>🌦️</b><strong>23°C</strong></div><div>Amanhã <b>🌧️</b><strong>21°C</strong></div><div>Quinta <b>☀️</b><strong>25°C</strong></div><div>Sexta <b>🌤️</b><strong>24°C</strong></div></div>
+    </section>
+
+    <section id="historico" class="page-section">
+      <div class="section-heading"><div><h2>Histórico</h2><p>Registro das principais ações do sistema.</p></div></div>
+      <div class="timeline">
+        <div><time>09:42</time><div><span>💧</span><strong>Irrigação concluída</strong><p>Sistema automático acionou a irrigação por 4 minutos.</p></div></div>
+        <div><time>09:00</time><div><span>🌱</span><strong>Sensores verificados</strong><p>Umidade do solo registrada em 64%.</p></div></div>
+        <div><time>08:30</time><div><span>☁️</span><strong>API meteorológica atualizada</strong><p>35% de possibilidade de chuva identificada.</p></div></div>
+        <div><time>07:15</time><div><span>⚙️</span><strong>Sistema iniciado</strong><p>Arduino e sensores conectados com sucesso.</p></div></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Sistema atualizado com sucesso!</div>
+  <script src="script.js"></script>
+</body>
+</html>
