@@ -226,7 +226,9 @@
   </main>
 
   <div class="toast" id="toast">Sistema atualizado com sucesso!</div>
+  <script src="config.js"></script>
   <script src="script.js"></script>
+  <script type="module" src="maquete3d.js?v=20261123"></script>
   <script>
     window.addEventListener('error', (event) => {
       if (!String(event.message || '').toLowerCase().includes('three') && !String(event.filename || '').includes('maquete')) return;
@@ -238,6 +240,5 @@
       }
     });
   </script>
-  <script type="module" src="maquete3d.js?v=20261123"></script>
 </body>
 </html>
