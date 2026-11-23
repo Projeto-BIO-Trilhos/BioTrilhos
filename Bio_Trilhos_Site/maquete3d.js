@@ -90,7 +90,7 @@ function createPlant(x,z,scale=1){
   const g=new THREE.Group();g.position.set(x,.1,z);g.scale.setScalar(scale);scene.add(g);
   for(let i=0;i<7;i++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.24,8,6),mat(i%2?0x397b43:0x55a05b));leaf.position.set(Math.cos(i)*.38,.42+Math.random()*.15,Math.sin(i)*.38);leaf.scale.set(.8,.22,1.7);leaf.rotation.z=.8;leaf.castShadow=true;g.add(leaf)}
 }
-for(let x=-8;x<=8;x+=2) for(let z of [3.8,5.7,-5.7,-3.8]) createPlant(x,z,.75;
+for(let x=-8;x<=8;x+=2) for(let z of [3.8,5.7,-5.7,-3.8]) createPlant(x,z,.75);
 
 // Canteiros elevados
 for(let z of [4.6,-4.6]){
@@ -265,8 +265,6 @@ const observer=new ResizeObserver(()=>resize());
 observer.observe(canvas.parentElement);
 window.addEventListener('resize',resize);
 resize();
-refreshSensors();
-setInterval(refreshSensors,10000);
 
 let started=performance.now();
 function animate(now){
@@ -346,3 +344,5 @@ function animateWaterDrops(t){
 }
 
 const MAQUETE_API_BASE=(window.BIOTRILHOS_API_URL||'http://127.0.0.1:5000/api').replace(/\/$/,'');
+refreshSensors();
+setInterval(refreshSensors,10000);
