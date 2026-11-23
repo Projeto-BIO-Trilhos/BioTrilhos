@@ -1,0 +1,19 @@
+CREATE DATABASE IF NOT EXISTS biotrilhos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE biotrilhos;
+
+CREATE TABLE IF NOT EXISTS estufas (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,localizacao VARCHAR(255),descricao VARCHAR(1000),ativa BOOLEAN DEFAULT TRUE,data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS sensores (id INT AUTO_INCREMENT PRIMARY KEY,estufa_id INT NOT NULL,nome VARCHAR(255) NOT NULL,tipo_sensor INT NOT NULL,localizacao VARCHAR(255),identificador_dispositivo VARCHAR(100) UNIQUE,unidade_medida VARCHAR(50),ativo BOOLEAN DEFAULT TRUE,data_instalacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (estufa_id) REFERENCES estufas(id));
+CREATE TABLE IF NOT EXISTS leituras_sensores (id INT AUTO_INCREMENT PRIMARY KEY,sensor_id INT NOT NULL,valor DECIMAL(10,2) NOT NULL,data_hora_leitura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,unidade_medida VARCHAR(50),status VARCHAR(50) DEFAULT 'OK',FOREIGN KEY (sensor_id) REFERENCES sensores(id));
+CREATE TABLE IF NOT EXISTS reservatorios (id INT AUTO_INCREMENT PRIMARY KEY,estufa_id INT NOT NULL,nome VARCHAR(255),capacidade_maxima DECIMAL(12,2),nivel_atual DECIMAL(12,2),percentual_atual DECIMAL(5,2),status VARCHAR(50) DEFAULT 'Normal',data_ultima_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY (estufa_id) REFERENCES estufas(id));
+CREATE TABLE IF NOT EXISTS irrigacoes (id INT AUTO_INCREMENT PRIMARY KEY,estufa_id INT NOT NULL,reservatorio_id INT NULL,data_hora_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,data_hora_fim TIMESTAMP NULL,duracao_segundos INT NULL,motivo VARCHAR(500),tipo_acionamento INT NOT NULL,status INT DEFAULT 0,FOREIGN KEY (estufa_id) REFERENCES estufas(id),FOREIGN KEY (reservatorio_id) REFERENCES reservatorios(id));
+CREATE TABLE IF NOT EXISTS dados_meteorologicos (id INT AUTO_INCREMENT PRIMARY KEY,estufa_id INT NOT NULL,temperatura_externa DECIMAL(5,2),umidade_externa DECIMAL(5,2),condicao_climatica VARCHAR(255),esta_chovendo BOOLEAN DEFAULT FALSE,probabilidade_chuva DECIMAL(5,2),previsao_chuva VARCHAR(500),velocidade_vento DECIMAL(5,2),data_hora_consulta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,fonte_api VARCHAR(100) DEFAULT 'Open-Meteo',FOREIGN KEY (estufa_id) REFERENCES estufas(id));
+
+INSERT INTO estufas (id,nome,localizacao,descricao,ativa) SELECT 1,'Bio Trilhos - Estufa Principal','Cruzeiro - São Paulo - Brasil','Estufa tecnológica integrada à linha ferroviária revitalizada.',TRUE WHERE NOT EXISTS (SELECT 1 FROM estufas WHERE id=1);
+INSERT INTO sensores (id,estufa_id,nome,tipo_sensor,localizacao,identificador_dispositivo,unidade_medida) VALUES
+(1,1,'Sensor de Temperatura',0,'Centro da estufa','TEMP_001','°C'),(2,1,'Sensor de Umidade do Ar',1,'Centro da estufa','UMID_AR_001','%'),(3,1,'Sensor de Umidade do Solo',2,'Canteiro principal','UMID_SOLO_001','%'),(4,1,'Sensor de Nível de Água',5,'Reservatório','NIVEL_001','%'),(5,1,'Sensor de Chuva',4,'Topo da estufa','CHUVA_001','bool')
+ON DUPLICATE KEY UPDATE nome=VALUES(nome);
+INSERT INTO reservatorios (id,estufa_id,nome,capacidade_maxima,nivel_atual,percentual_atual,status) SELECT 1,1,'Reservatório Principal',1000,820,82,'Normal' WHERE NOT EXISTS (SELECT 1 FROM reservatorios WHERE id=1);
+INSERT INTO leituras_sensores (sensor_id,valor,unidade_medida,status) SELECT 1,24.8,'°C','OK' WHERE NOT EXISTS (SELECT 1 FROM leituras_sensores);
+INSERT INTO leituras_sensores (sensor_id,valor,unidade_medida,status) SELECT 2,72.0,'%','OK' WHERE NOT EXISTS (SELECT 1 FROM leituras_sensores WHERE sensor_id=2);
+INSERT INTO leituras_sensores (sensor_id,valor,unidade_medida,status) SELECT 3,64.0,'%','OK' WHERE NOT EXISTS (SELECT 1 FROM leituras_sensores WHERE sensor_id=3);
+INSERT INTO dados_meteorologicos (estufa_id,temperatura_externa,umidade_externa,condicao_climatica,esta_chovendo,probabilidade_chuva,velocidade_vento) SELECT 1,25.5,68,'Parcialmente nublado',FALSE,25,8 WHERE NOT EXISTS (SELECT 1 FROM dados_meteorologicos WHERE estufa_id=1);

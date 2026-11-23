@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bio Trilhos | Estufa Inteligente</title>
   <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}
+  </script>
 </head>
 <body>
   <aside class="sidebar">
@@ -21,6 +24,7 @@
       <button class="nav-item" data-section="sensores">◉ <span>Sensores</span></button>
       <button class="nav-item" data-section="irrigacao">💧 <span>Irrigação</span></button>
       <button class="nav-item" data-section="clima">☁ <span>Clima</span></button>
+      <button class="nav-item" data-section="maquete">◆ <span>Maquete 3D</span></button>
       <button class="nav-item" data-section="historico">▤ <span>Histórico</span></button>
     </nav>
 
@@ -188,9 +192,52 @@
         <div><time>07:15</time><div><span>⚙️</span><strong>Sistema iniciado</strong><p>Arduino e sensores conectados com sucesso.</p></div></div>
       </div>
     </section>
+
+    <section id="maquete" class="page-section">
+      <div class="section-heading"><div><h2>Maquete digital</h2><p>Explore a estufa tecnológica em ambiente tridimensional.</p></div><span class="live"><i></i> Dados da API</span></div>
+      <div class="maquete-layout">
+        <div class="three-panel">
+          <canvas id="threeCanvas"></canvas>
+          <div class="three-toolbar">
+            <button id="viewHome" title="Vista geral">⌂</button>
+            <button id="viewGreenhouse" title="Aprox. estufa">◉</button>
+            <button id="toggleAutoRotate" title="Rotação automática">↻</button>
+          </div>
+          <div class="three-help">Arraste para girar · Role para aproximar</div>
+        </div>
+        <aside class="sensor-detail">
+          <span class="sensor-detail-icon" id="detailIcon">🌡️</span>
+          <p>Sensor selecionado</p>
+          <h3 id="detailName">Sensor de Temperatura</h3>
+          <strong id="detailValue">24.8°C</strong>
+          <small id="detailStatus">● Conectado à API</small>
+          <hr>
+          <div class="detail-grid">
+            <div><span>Estufa</span><b>Principal</b></div>
+            <div><span>Tipo</span><b id="detailType">Temperatura</b></div>
+          </div>
+          <div class="maquete-irrigation">
+            <div><span>Irrigação</span><strong id="maqueteIrrigationStatus">Desligada</strong></div>
+            <button id="toggleMaqueteIrrigation" type="button">Acionar</button>
+          </div>
+        </aside>
+      </div>
+    </section>
   </main>
 
   <div class="toast" id="toast">Sistema atualizado com sucesso!</div>
   <script src="script.js"></script>
+  <script>
+    window.addEventListener('error', (event) => {
+      if (!String(event.message || '').toLowerCase().includes('three') && !String(event.filename || '').includes('maquete')) return;
+      const panel = document.querySelector('.three-panel');
+      if (panel) {
+        let message = panel.querySelector('.maquete-error');
+        if (!message) { message = document.createElement('div'); message.className = 'maquete-error'; panel.appendChild(message); }
+        message.textContent = 'Não foi possível iniciar a maquete: ' + (event.message || 'erro no WebGL');
+      }
+    });
+  </script>
+  <script type="module" src="maquete3d.js?v=20261123"></script>
 </body>
 </html>

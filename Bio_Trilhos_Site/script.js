@@ -4,14 +4,14 @@
 // ============================================================================
 
 // Configuração da API
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = window.BIOTRILHOS_API_URL || "http://127.0.0.1:5000/api";
 const ESTUFA_ID = 1; // ID da estufa padrão
 
 // Elementos DOM
 const navItems = document.querySelectorAll(".nav-item");
 const sections = document.querySelectorAll(".page-section");
 const pageTitle = document.getElementById("page-title");
-const titles = {dashboard:"Dashboard", sensores:"Sensores", irrigacao:"Irrigação", clima:"Clima", historico:"Histórico"};
+const titles = {dashboard:"Dashboard", sensores:"Sensores", irrigacao:"Irrigação", clima:"Clima", maquete:"Maquete 3D", historico:"Histórico"};
 
 // Variáveis globais
 let autoMode = true;
